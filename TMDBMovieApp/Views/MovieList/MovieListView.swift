@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct MovieListView: View {
+    @ObservedObject var movieVm: MovieListViewModel
+    
     var body: some View {
-        Text("Hello, World!")
+        
+        
     }
 }
 
 #Preview {
-    MovieListView()
+    MovieListView(movieVm: MovieListViewModel(api: APIService.shared))
 }

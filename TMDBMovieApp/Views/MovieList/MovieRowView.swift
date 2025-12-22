@@ -6,13 +6,17 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MovieRowView: View {
+    
+    let movie: Movie
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
     }
 }
 
 #Preview {
-    MovieRowView()
+    MovieRowView(movie: Movie(id: 12, title: "Mörümcek Kaıdn", overview: "kadın işte", posterPath: "asd", backdropPath: "wdfs", voteAverage: 3.4))"
 }

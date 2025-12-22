@@ -10,7 +10,7 @@ import SwiftUI
 struct RootView: View {
     
     @StateObject var movieVm = MovieListViewModel(api: APIService.shared)
-    
+
     var body: some View {
         TabView {
             MovieListView(movieVm: movieVm)

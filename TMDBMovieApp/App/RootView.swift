@@ -10,10 +10,17 @@ import SwiftUI
 struct RootView: View {
     
     @StateObject var movieVm = MovieListViewModel(api: APIService.shared)
-
+    @StateObject var favoriteVm: FavoritesViewModel
+    
+    init(){
+        let storage = UserDefaultsFavoritesStorage()
+        let repository = FavoritesRepository(storage: storage)
+        _favoriteVm = StateObject(wrappedValue: FavoritesViewModel(repository: repository))
+    }
+    
     var body: some View {
         TabView {
-            MovieListView(movieVm: movieVm)
+            MovieListView(movieVm: movieVm, favoriteVm: favoriteVm)
                 .tabItem {
                     Label("Movies", systemImage: "film")
                 }

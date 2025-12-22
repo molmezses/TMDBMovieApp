@@ -9,11 +9,12 @@ import SwiftUI
 
 struct MovieListView: View {
     @ObservedObject var movieVm: MovieListViewModel
+    @ObservedObject var favoriteVm : FavoritesViewModel
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                
+                content
             }
             .navigationTitle("Popular Movies")
             .refreshable {
@@ -49,10 +50,13 @@ struct MovieListView: View {
         case .success(let movies):
             LazyVStack(spacing: 16){
                 ForEach(movies.indices , id: \.self) { index in
+                    
+                    let movie = movies[index]
                     NavigationLink {
                         
                     } label: {
-                        
+                        MovieRowView(favoriteVM: favoriteVm, movie: movie)
+                            .foregroundStyle(.black)
                     }
                     .onAppear {
                         if index == movies.count - 5 {
@@ -63,6 +67,11 @@ struct MovieListView: View {
                     }
 
                 }
+                
+                if movieVm.isLoadingNextPage{
+                    ProgressView()
+                        .padding(.trailing , 24)
+                }
             }
             .padding()
         }
@@ -70,5 +79,8 @@ struct MovieListView: View {
 }
 
 #Preview {
-    MovieListView(movieVm: MovieListViewModel(api: APIService.shared))
+    let storage = UserDefaultsFavoritesStorage()
+    let repository = FavoritesRepository(storage: storage)
+    
+    MovieListView(movieVm: MovieListViewModel(api: APIService.shared), favoriteVm: FavoritesViewModel(repository: repository))
 }

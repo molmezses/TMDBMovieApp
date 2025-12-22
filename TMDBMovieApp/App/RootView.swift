@@ -13,7 +13,7 @@ struct RootView: View {
     
     var body: some View {
         TabView {
-            MovieListView()
+            MovieListView(movieVm: movieVm)
                 .tabItem {
                     Label("Movies", systemImage: "film")
                 }

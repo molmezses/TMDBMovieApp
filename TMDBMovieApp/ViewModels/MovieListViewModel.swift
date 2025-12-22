@@ -29,9 +29,66 @@ final class MovieListViewModel: ObservableObject {
     private var cachedPopularPage: Int = 1
     private var cachedPopularTotalPage: Int = 1
     
+
     //MARK: -DEPENDENCIES
     ///dependency -> bagımlılık
     /// Bu sınıfın çalışabilmesi için bagımlı olduğu başka şeyler var
+    
+    
+    ///api : MovieAPIProtocol yazarak test işlemlerinde kullılabilr ve direk api = APIService.shared deseydik viewmodele kitlenecekti değiştirmek zor olaaktı
+    private let api: MovieAPIProtocol
+    
+    ///böyle yaparak viewmodelin gerek duyduğu denependency i inital ederken alabilyorsun
+    ///ileride -> MovieListViewModel(api: MovieApi()) diyerek vereiltsin
+    ///
+    /// DEPENDENCY INJECTİON
+    /// test yazabilirm
+    /// mock data verebiliirm
+    /// service seğişirse viewModel değişmeisne gerek yok 
+    init(api: MovieAPIProtocol) {
+        self.api = api
+    }
+    
+    func fetchMovies(reset: Bool = false) async {
+        if reset {
+            currentPage = 1
+            totalPage = 1
+            state = .loading
+        }
+        
+        guard currentPage <= totalPage else { return }
+        state = .loading
+        
+        do{
+            let response: MovieResponse
+            
+            response = try await api.fetchPopularMovies(page: currentPage)
+
+            cachedPopularMovies.append(contentsOf: response.results)
+            cachedPopularPage = currentPage
+            cachedPopularTotalPage = response.totalPages
+            
+            let newMovies: [Movie]
+            
+            switch state {
+            case .success(let existing):
+                ///existing uı da zaten olan sonuçkar
+                ///existing + response.results  =  yeni sayfa yüklenmiş
+                /////pagiantion
+                newMovies = existing + response.results
+            default:
+                newMovies = response.results
+            }
+            
+            totalPage = response.totalPages
+            currentPage += 1
+            
+            state = newMovies.isEmpty ? .empty : .success(newMovies)
+
+        }catch{
+            state = .error("Something went wrong. Please try again.")
+        }
+    }
     
     
     

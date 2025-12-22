@@ -11,4 +11,7 @@ import Foundation
 /// Protocol -> Kurallar gibi düşün xxxxx: protocol -> o protocola uyan şeyleri kullnamak ve buludnurmak zorunda
 protocol MovieAPIProtocol{
     
+    func fetchPopularMovies(page: Int) async throws -> MovieResponse
+    
+    
 }

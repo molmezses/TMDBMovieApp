@@ -18,27 +18,30 @@ struct MovieRowView: View {
         HStack {
             KFImage(movie.posterURL)
                 .placeholder {
-                    ProgressView().frame(width: 80, height: 120)
+                    ProgressView().frame(width: 110, height: 150)
                 }
                 .onFailure { _ in
                     print("Error MovieRow Async Kingfisher")
                 }
                 .resizable()
                 .scaledToFill()
-                .frame(width: 80, height: 120)
+                .frame(width: 100, height: 160)
                 .clipped()
+                .clipShape(RoundedRectangle(cornerRadius: 12))
             
-            VStack(alignment: .leading){
+            VStack(alignment: .leading, spacing: 14){
                 Text(movie.title)
                     .frame(alignment: .leading)
                     .multilineTextAlignment(.leading)
                     .font(.headline)
+                    .foregroundStyle(.white)
                 
                 Text(movie.overview)
                     .frame(alignment: .leading)
                     .multilineTextAlignment(.leading)
                     .font(.caption)
                     .lineLimit(3)
+                    .foregroundStyle(.white)
                 
                 HStack {
                     Image(systemName: "star.fill")
@@ -73,5 +76,5 @@ struct MovieRowView: View {
     let storage = UserDefaultsFavoritesStorage()
     let repository = FavoritesRepository(storage: storage)
     
-    MovieRowView(favoriteVM: FavoritesViewModel(repository: repository), movie: Movie(id: 12, title: "Mörümcek Kaıdn", overview: "kadın işte", posterPath: "asd", backdropPath: "wdfs", voteAverage: 3.4))
+    MovieRowView(favoriteVM: FavoritesViewModel(repository: repository), movie: Movie(id: 12, title: "Mörümcek Kaıdn", overview: "kadın işte", posterPath: "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", backdropPath: "wdfs", voteAverage: 3.4))
 }

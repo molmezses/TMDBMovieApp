@@ -48,16 +48,31 @@ struct MovieListView: View {
                 }
             }
         case .success(let movies):
-            LazyVStack(spacing: 16){
-                ForEach(movies.indices , id: \.self) { index in
-                    
+            LazyVStack(spacing: 20) {
+
+                ForEach(movies.indices, id: \.self) { index in
                     let movie = movies[index]
+
                     NavigationLink {
-                        
+                        MovieDetailView(movie: movie, favoriteVm: favoriteVm)
                     } label: {
-                        MovieRowView(favoriteVM: favoriteVm, movie: movie)
-                            .foregroundStyle(.black)
+                        MovieRowView(
+                            favoriteVM: favoriteVm,
+                            movie: movie
+                        )
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(.systemBackground))
+                                .shadow(
+                                    color: .black.opacity(0.08),
+                                    radius: 8,
+                                    x: 0,
+                                    y: 4
+                                )
+                        )
                     }
+                    .buttonStyle(.plain) 
+                    .padding(.horizontal)
                     .onAppear {
                         if index == movies.count - 5 {
                             Task {
@@ -65,15 +80,14 @@ struct MovieListView: View {
                             }
                         }
                     }
-
                 }
-                
-                if movieVm.isLoadingNextPage{
+
+                if movieVm.isLoadingNextPage {
                     ProgressView()
-                        .padding(.trailing , 24)
+                        .padding(.vertical, 24)
                 }
             }
-            .padding()
+            .padding(.top, 12)
         }
     }
 }
